@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>please check your token here</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        padding: 20px;
+      }
+      h2 {
+        text-align: center;
+      }
+      #searchBar {
+        width: 100%;
+        padding: 10px;
+        margin: 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+      }
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+      .highlight {
+        background-color: #ffeb3b;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Patient Queue & Token System</h2>
+
+    <input type="text" id="searchBar" placeholder="Search patient by name..." />
+
+    <table id="queueTable">
+      <thead>
+        <tr>
+          <th>Token No</th>
+          <th>Patient Name</th>
+          <th>Estimated Waiting Time</th>
+        </tr>
+      </thead>
+      <tbody id="queueBody"></tbody>
+    </table>
+
+    <script>
+      // Sample patient data
+      let patients = [
+        { name: "shruti Deolalikar", token: 5 },
+        { name: "pragati harale", token: 8 },
+        { name: "tanisha dasarwar", token: 3 },
+        { name: "Neha gupta", token: 2 },
+        { name: "Vikram aditya", token: 1 },
+        { name: "anjali raut", token: 4 },
+        { name: "neha sharma", token: 6 },
+        { name: "sneha Rathod", token: 7 },
+        { name: "tanishka belekar", token: 9 },
+        { name: "Arjun Verma", token: 12 },
+        { name: "Simran Kaur", token: 11 },
+        { name: "Deepak Nair", token: 15 },
+        { name: "Sunita Mishra", token: 16 },
+        { name: "Anil Yadav", token: 20 },
+        { name: "Kavita Iyer", token: 17 },
+        { name: "Ramesh Menon" },
+        { name: "Divya Sharma" },
+        { name: "Sanjay Rao" },
+        { name: "Alok Pandey" },
+        { name: "Rajesh Tiwari" },
+        { name: "Maya Singh" },
+        { name: "Preeti Mehta" },
+        { name: "Shivam Kapoor" },
+        { name: "Geeta Soni" },
+        { name: "Vinay Jha" },
+        { name: "Manish Saxena" },
+        { name: "Chitra Pillai" },
+        { name: "Anurag Bhatia" },
+        { name: "Seema Rawat" },
+      ];
+
+      // Assign tokens in sequence (1,2,3...)
+      patients = patients.map((patient, index) => ({
+        ...patient,
+        token: index + 1,
+      }));
+
+      console.log(patients);
+
+      // Assume each appointment takes 10 mins
+      function renderQueue() {
+        let queueBody = document.getElementById("queueBody");
+        queueBody.innerHTML = "";
+
+        patients.forEach((patient, index) => {
+          let row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${patient.token}</td>
+          <td>${patient.name}</td>
+          <td>${(index + 1) * 10} mins</td>
+        `;
+          queueBody.appendChild(row);
+        });
+      }
+
+      // Search functionality
+      document
+        .getElementById("searchBar")
+        .addEventListener("keyup", function () {
+          let filter = this.value.toLowerCase();
+          let rows = document.querySelectorAll("#queueBody tr");
+
+          rows.forEach((row) => {
+            let name = row.cells[1].innerText.toLowerCase();
+            if (name.includes(filter)) {
+              row.classList.add("highlight");
+              row.style.display = "";
+            } else {
+              row.classList.remove("highlight");
+              row.style.display = filter ? "none" : "";
+            }
+          });
+        });
+
+      renderQueue();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🏥 Hospital Reception – Patient Locator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-dark: #0f172a;
+        --text: #0b1727;
+        --brand: #2563eb;
+        --brand2: #22c55e;
+        --ring: 0 10px 30px rgba(0, 0, 0, 0.15);
+        --radius: 18px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+        color: var(--text);
+        background: var(--bg-dark);
+        overflow-x: hidden;
+      }
+      .hero {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(2, 6, 23, 0.75) 0%,
+            rgba(2, 6, 23, 0.55) 40%,
+            rgba(2, 6, 23, 0.85) 100%
+          ),
+          url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1920&auto=format&fit=crop")
+            center/cover no-repeat;
+        filter: saturate(1.05);
+        z-index: -1;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: #fff;
+        margin-bottom: 22px;
+      }
+      header .logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #fff1;
+        display: grid;
+        place-items: center;
+        backdrop-filter: blur(6px);
+        border: 1px solid #ffffff22;
+      }
+      header h1 {
+        font-size: clamp(22px, 2.6vw, 34px);
+        font-weight: 800;
+        margin: 0;
+        color: #fff;
+      }
+      header p {
+        margin: 0;
+        color: #cbd5e1;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 22px;
+      }
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid #e7eef8;
+        border-radius: var(--radius);
+        box-shadow: var(--ring);
+        backdrop-filter: blur(6px);
+      }
+      .search {
+        padding: 22px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        border-bottom: 1px solid #eef3f9;
+      }
+      .search input {
+        flex: 1;
+        padding: 14px 16px;
+        border: 1px solid #e0e6ef;
+        border-radius: 14px;
+        outline: none;
+        font-size: 16px;
+        background: #fff;
+      }
+      .search button {
+        padding: 14px 18px;
+        border: none;
+        border-radius: 14px;
+        background: var(--brand);
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .search button:hover {
+        filter: brightness(1.05);
+      }
+      .hint {
+        padding: 0 22px 18px;
+        color: #64748b;
+        font-size: 14px;
+      }
+
+      .result {
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 720px) {
+        .result {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #eaf0f6;
+        border-radius: 16px;
+        padding: 16px 16px 14px;
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        color: #0b1727;
+        opacity: 0.75;
+      }
+      .big {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0b1727;
+        letter-spacing: 0.2px;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+        color: #334155;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #0b1727;
+        padding: 8px 10px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .ok {
+        background: #ecfdf5;
+        border-color: #bbf7d0;
+        color: #065f46;
+      }
+      .mapWrap {
+        padding: 18px;
+      }
+      .mapHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #0f172a;
+      }
+      .mapHeader h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .mapHeader a {
+        text-decoration: none;
+        background: var(--brand2);
+        color: #083d2e;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: 800;
+        border: 1px solid #86efac;
+      }
+      .map {
+        width: 100%;
+        height: 520px;
+        border: 0;
+        border-radius: 16px;
+        box-shadow: var(--ring);
+      }
+      .footerNote {
+        color: #94a3b8;
+        text-align: center;
+        margin-top: 16px;
+        font-size: 13px;
+      }
+
+      .toast {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #111827;
+        color: #fff;
+        box-shadow: var(--ring);
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: 0.3s;
+        pointer-events: none;
+        z-index: 50;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero" aria-hidden="true"></div>
+
+    <div class="wrap">
+      <header>
+        <div class="logo">🏥</div>
+        <div>
+          <h1>Hospital Reception – Patient Locator & Directions</h1>
+          <p>
+            Find the patient’s room, floor, department, doctor, token, and
+            estimated wait. Large map included.
+          </p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- LEFT: Search + Result -->
+        <section class="panel">
+          <div class="search">
+            <input
+              id="patientInput"
+              type="text"
+              placeholder="Enter patient name (e.g., Shruti Deolalikar)"
+            />
+            <button id="findBtn">Find</button>
+          </div>
+          <div class="hint">Please enter full name</div>
+
+          <div class="result" id="resultGrid" style="display: none">
+            <div class="card" style="grid-column: 1 / -1">
+              <h3>Patient</h3>
+              <div class="big" id="rName">—</div>
+              <div class="row">
+                <span class="tag" id="rToken">Token —</span>
+                <span class="tag ok" id="rStatus">Checked-in</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Room No.</h3>
+              <div class="big" id="rRoom">—</div>
+              <div class="row">assigned room</div>
+            </div>
+
+            <div class="card">
+              <h3>Floor</h3>
+              <div class="big" id="rFloor">—</div>
+              <div class="row">Elevators A & C serve all floors</div>
+            </div>
+
+            <div class="card">
+              <h3>Department</h3>
+              <div class="big" id="rDept">—</div>
+              <div class="row">Follow green signage to the department</div>
+            </div>
+
+            <div class="card">
+              <h3>Doctor</h3>
+              <div class="big" id="rDoctor">—</div>
+              <div class="row">Consulting today</div>
+            </div>
+
+            <div class="card">
+              <h3>Admission Date & Time</h3>
+              <div class="big" id="rAdmission">—</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT: Map -->
+        <aside class="panel mapWrap">
+          <div class="mapHeader">
+            <h2>Hospital Map & Directions</h2>
+            <a
+              id="mapLink"
+              target="_blank"
+              href="https://www.google.com/maps?q=Your+Hospital+Name"
+              >Open in Google Maps</a
+            >
+          </div>
+          <iframe
+            id="mapFrame"
+            class="map"
+            src="https://www.google.com/maps?q=Your%20Hospital%20Name&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            aria-label="Hospital Map"
+          ></iframe>
+          <div class="footerNote">
+            Replace “Your Hospital Name” with your real address for accurate
+            routing.
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">Please enter a patient name.</div>
+
+    <script>
+      // ---------- Helpers ----------
+      const $ = (id) => document.getElementById(id);
+      const toast = (msg) => {
+        const t = $("toast");
+        t.textContent = msg || t.textContent;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 1800);
+      };
+      function hashToNumber(str, max) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) {
+          h = (h << 5) - h + str.charCodeAt(i);
+          h |= 0;
+        }
+        return Math.abs(h) % max;
+      }
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+      function formatTime(d) {
+        return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+      }
+      function getAdmissionDate(name) {
+        const daysAgo = hashToNumber(name, 5); // 0–4 days ago
+        const hours = hashToNumber(name + "h", 24); // 0–23
+        const minutes = hashToNumber(name + "m", 60); // 0–59
+        const d = new Date();
+        d.setDate(d.getDate() - daysAgo);
+        d.setHours(hours, minutes, 0, 0);
+        return `${d.toLocaleDateString()} ${formatTime(d)}`;
+      }
+
+      // ---------- Static data ----------
+      const departments = [
+        "Cardiology",
+        "Neurology",
+        "Orthopedics",
+        "Pediatrics",
+        "Oncology",
+        "Dermatology",
+        "ENT",
+        "General Medicine",
+      ];
+      const doctors = [
+        "Dr. A. Mehta",
+        "Dr. S. Rao",
+        "Dr. P. Iyer",
+        "Dr. N. Chavan",
+        "Dr. V. Kapoor",
+        "Dr. R. Desai",
+        "Dr. K. Pillai",
+        "Dr. T. Gupta",
+      ];
+
+      // ---------- Main ----------
+      function findDetails() {
+        const nameRaw = $("patientInput").value.trim();
+        if (!nameRaw) {
+          toast("Please enter a patient name.");
+          return;
+        }
+
+        // Clean + Title Case
+        const name = nameRaw
+          .replace(/\s+/g, " ")
+          .toLowerCase()
+          .replace(/\b\w/g, (m) => m.toUpperCase());
+
+        // Stable assignments from name
+        const room = (hashToNumber(name, 100) % 100) + 1; // 1–100
+        const floor = Math.max(1, Math.ceil(room / 20)); // 1–5
+        const dept = departments[hashToNumber(name, departments.length)];
+        const doc = doctors[hashToNumber(name + dept, doctors.length)];
+
+        // Token 21–220 (no 1–20 as you asked earlier)
+        const token = 21 + hashToNumber(name, 200);
+
+        // Queue
+        const peopleAhead = hashToNumber(name + token, 12); // 0–11
+        const estMinutes = peopleAhead * 6;
+
+        // Times
+        const admission = getAdmissionDate(name);
+        const checkin = formatTime(new Date());
+
+        // Update UI
+        $("resultGrid").style.display = "grid";
+        $("rName").textContent = name;
+        $("rRoom").textContent = room;
+        $("rFloor").textContent = floor;
+        $("rDept").textContent = dept;
+        $("rDoctor").textContent = doc;
+        $("rToken").textContent = `Token ${token}`;
+        $("rAdmission").textContent = admission;
+        $("rCheckin").textContent = checkin;
+        $(
+          "rWait"
+        ).textContent = `Est. wait ${estMinutes} min  •  ${peopleAhead} ahead`;
+
+        // Map (replace with your hospital)
+        const hospitalQuery = encodeURIComponent("Your Hospital Name");
+        $(
+          "mapFrame"
+        ).src = `https://www.google.com/maps?q=${hospitalQuery}&output=embed`;
+        $("mapLink").href = `https://www.google.com/maps?q=${hospitalQuery}`;
+      }
+
+      $("findBtn").addEventListener("click", findDetails);
+      $("patientInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          findDetails();
+        }
+      });
+    </script>
+  </body>
+</html>

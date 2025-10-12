@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Availability</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 400px;
+        background-color: #fff;
+        margin: 40px auto;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding-bottom: 50px; /* Extra space */
+      }
+
+      .header {
+        background-color: #cce5f6;
+        padding: 16px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #000;
+      }
+
+      .doctor-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .doctor-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .doctor-name {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 4px;
+      }
+
+      .doctor-time {
+        font-size: 0.9em;
+        color: #555;
+      }
+
+      .status {
+        padding: 6px 12px;
+        border-radius: 5px;
+        color: white;
+        font-size: 0.85em;
+        font-weight: bold;
+      }
+
+      .available {
+        background-color: #4caf50;
+      }
+
+      .unavailable {
+        background-color: #e74c3c;
+      }
+
+      /* Responsive */
+      @media (max-width: 480px) {
+        .container {
+          margin: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">Doctor Availability</div>
+
+      <div class="doctor-card">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Smith</div>
+          <div class="doctor-time">Present until 4:00 PM</div>
+        </div>
+        <div class="status available">Available</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Johnson</div>
+          <div class="doctor-time">Present from 2:00 PM – 6:00 PM</div>
+        </div>
+        <div class="status unavailable">Unavailable</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Lee</div>
+          <div class="doctor-time">Present until 5:30 PM</div>
+        </div>
+        <div class="status available">Available</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Williams</div>
+          <div class="doctor-time">Present from 10:00 AM – 1:00 PM</div>
+        </div>
+        <div class="status unavailable">Unavailable</div>
+      </div>
+    </div>
+
+    <script>
+      // Example JS: You can dynamically change availability here
+      // document.querySelector('.status').classList.replace('unavailable', 'available');
+    </script>
+  </body>
+</html>

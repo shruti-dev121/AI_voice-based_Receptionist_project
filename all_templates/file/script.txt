@@ -1,0 +1,278 @@
+  <script>
+  const images = [
+    'hospital.png',
+    'hospital2.png',
+    'hospital3.png'
+  ];
+
+  let currentIndex = 0;
+  const imgElement = document.querySelector('.left-side img');
+
+  function changeImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    imgElement.src = images[currentIndex];
+  }
+
+  setInterval(changeImage, 5000); // change every 5 seconds
+  </script>
+
+  <script>
+  const fields = [
+    { id: 'name', prompt: 'Please say your full name', validate: (val) => val.trim().length > 3 },
+    { id: 'phone', prompt: 'Please say your 10-digit phone number', validate: (val) => /^\d{10}$/.test(val.replace(/\D/g, '')) },
+    { id: 'aadhar', prompt: 'Please say your 12-digit Aadhar number', validate: (val) => /^\d{12}$/.test(val.replace(/\D/g, '')) },
+    { id: 'email', prompt: 'Please say your email address', validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()) },
+    { id: 'dob', prompt: 'Please say your date of birth', validate: (val) => /^\d{4}-\d{2}-\d{2}$/.test(val.trim()) },
+    { id: 'address', prompt: 'Please say your full address', validate: (val) => val.trim().length > 5 }
+  ];
+
+  const synth = window.speechSynthesis;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  let recognition;
+  let selectedVoice = null;
+
+  // Number words map for DOB parsing
+  const numberWords = {
+    'zero':0, 'one':1, 'two':2, 'three':3, 'four':4, 'five':5,
+    'six':6, 'seven':7, 'eight':8, 'nine':9, 'ten':10,
+    'eleven':11, 'twelve':12, 'thirteen':13, 'fourteen':14,
+    'fifteen':15, 'sixteen':16, 'seventeen':17, 'eighteen':18,
+    'nineteen':19, 'twenty':20, 'thirty':30, 'forty':40,
+    'fifty':50, 'sixty':60, 'seventy':70, 'eighty':80, 'ninety':90
+  };
+
+  // Month names map
+  const monthNames = {
+    january: '01', february: '02', march: '03', april: '04',
+    may: '05', june: '06', july: '07', august: '08',
+    september: '09', october: '10', november: '11', december: '12'
+  };
+
+  // Convert words to number, supports numbers like "two thousand three"
+  function wordsToNumber(text) {
+    text = text.toLowerCase().replace(/-/g, ' ');
+    const tokens = text.split(/\s+/);
+    let number = 0;
+    let temp = 0;
+    for (let token of tokens) {
+      if (token === 'thousand') {
+        temp *= 1000;
+        number += temp;
+        temp = 0;
+      } else if (numberWords.hasOwnProperty(token)) {
+        temp += numberWords[token];
+      } else if (!isNaN(parseInt(token))) {
+        temp += parseInt(token);
+      }
+    }
+    number += temp;
+    return number.toString();
+  }
+
+  // Normalize DOB input to YYYY-MM-DD format with flexible parsing, accepts inputs like "2003 7 12"
+  function normalizeDOB(text) {
+    text = text.toLowerCase().replace(/dash/g, ' ');
+    const parts = text.trim().split(/\s+/).filter(p => p.length > 0);
+
+    let year = null, month = null, day = null;
+
+    // Try to find year (4 digits) or number words for year at start
+    for (let i = 0; i < parts.length; i++) {
+      if (/^\d{4}$/.test(parts[i])) {
+        year = parts[i];
+        parts.splice(i, 1);
+        break;
+      }
+    }
+    // If not found, try to parse first few tokens as words to number for year
+    if (!year) {
+      for (let len = 3; len >= 1; len--) {
+        const candidate = parts.slice(0,len).join(' ');
+        const numYear = wordsToNumber(candidate);
+        if (numYear.length === 4) {
+          year = numYear;
+          parts.splice(0,len);
+          break;
+        }
+      }
+    }
+
+    // Next find month by name or numeric value (1-12)
+    for (let i = 0; i < parts.length; i++) {
+      if (monthNames[parts[i]]) {
+        month = monthNames[parts[i]];
+        parts.splice(i, 1);
+        break;
+      } else if (/^\d{1,2}$/.test(parts[i])) {
+        const m = parseInt(parts[i]);
+        if (m >= 1 && m <= 12) {
+          month = m.toString().padStart(2,'0');
+          parts.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    // Next find day (1-31)
+    for (let i = 0; i < parts.length; i++) {
+      if (/^\d{1,2}$/.test(parts[i])) {
+        const d = parseInt(parts[i]);
+        if (d >= 1 && d <= 31) {
+          day = d.toString().padStart(2,'0');
+          parts.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    if (!year || !month || !day) {
+      return ''; // invalid
+    }
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function loadIndianVoice() {
+    return new Promise((resolve) => {
+      const voices = synth.getVoices();
+      const indianVoice = voices.find(voice => voice.name.includes("Google हिन्दी") || voice.lang === "en-IN");
+
+      if (indianVoice) {
+        selectedVoice = indianVoice;
+        resolve();
+      } else {
+        setTimeout(() => resolve(loadIndianVoice()), 200);
+      }
+    });
+  }
+
+  function speak(text) {
+    return new Promise((resolve) => {
+      synth.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-IN';
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.onend = resolve;
+      synth.speak(utterance);
+    });
+  }
+
+  function startListening(timeout = 25000) {
+    return new Promise((resolve, reject) => {
+      let timer;
+
+      recognition.onresult = (event) => {
+        clearTimeout(timer);
+        const transcript = event.results[0][0].transcript;
+        resolve(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        clearTimeout(timer);
+        reject(event.error);
+      };
+
+      recognition.onend = () => {
+        clearTimeout(timer);
+        reject('Speech recognition ended without result');
+      };
+
+      recognition.start();
+
+      timer = setTimeout(() => {
+        recognition.stop();
+      }, timeout);
+    });
+  }
+
+  function normalizeNumberInput(text) {
+    return text.replace(/\D/g, '');
+  }
+
+  async function fillFormWithVoice() {
+    for (let field of fields) {
+      let success = false;
+
+      while (!success) {
+        try {
+          await speak(field.prompt);
+
+          let listenTimeout = 25000; // 25 seconds for all fields
+
+          let spoken = await startListening(listenTimeout);
+
+          if (field.id === 'email') {
+            spoken = spoken.toLowerCase().replace(/\s+dot\s+/g, '.').replace(/\s+/g, '');
+          }
+
+          if (field.id === 'dob') {
+            spoken = normalizeDOB(spoken);
+          }
+
+          if (field.id === 'phone' || field.id === 'aadhar') {
+            spoken = normalizeNumberInput(spoken);
+          }
+
+          if (field.validate(spoken)) {
+            document.getElementById(field.id).value = spoken;
+            success = true;
+          } else {
+            await speak(`The input you gave seems invalid. Please try again.`);
+          }
+        } catch (err) {
+          await speak("Sorry, I did not catch that. Let's try again.");
+        }
+      }
+    }
+
+    // Confirm form submission
+    await speak("All fields are filled. Do you want to submit the form? Please say yes or no.");
+
+    try {
+      const confirmation = await startListening(15000);
+      if (confirmation.toLowerCase().includes('yes')) {
+        document.getElementById('patientForm').submit();
+      } else {
+        await speak("Form submission cancelled. You can review or edit your details manually.");
+      }
+    } catch {
+      await speak("No confirmation received. Form submission cancelled.");
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: pointer;
+    `;
+    overlay.textContent = 'Click anywhere to start voice input';
+    document.body.appendChild(overlay);
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    await loadIndianVoice();
+
+    const startOnce = async () => {
+      document.body.removeEventListener('click', startOnce);
+      document.body.removeChild(overlay);
+
+      await speak("Welcome to the patient registration. Let us begin.");
+      await fillFormWithVoice();
+    };
+
+    document.body.addEventListener('click', startOnce);
+  });
+  </script>

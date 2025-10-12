@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Patient Registration</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        margin: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(270deg, #c2d1d3, #e7ebf1, #e5edb6, #d0d3d6);
+        background-size: 800% 800%;
+        animation: gradientBG 30s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .container {
+        display: flex;
+        width: 900px;
+        max-width: 100%;
+        min-height: 600px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .left-side {
+        flex: 1;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .left-side img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .right-side {
+        flex: 1;
+        padding: 25px;
+        background-color: #ffffff;
+        border-radius: 0 10px 10px 0;
+        box-sizing: border-box;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .right-side h2 {
+        text-align: center;
+        color: #007acc;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #000;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="date"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+      textarea {
+        resize: vertical;
+      }
+      button {
+        margin-top: 20px;
+        padding: 10px;
+        width: 100%;
+        background-color: #081e03;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #005f99;
+      }
+      @media (max-width: 900px) {
+        .container {
+          flex-direction: column;
+          height: auto;
+          width: 100%;
+          max-width: 450px;
+          border-radius: 10px;
+          overflow: visible;
+        }
+        .left-side {
+          height: 180px;
+        }
+        .right-side {
+          padding: 20px;
+          border-radius: 0 0 10px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" role="main">
+      <div class="left-side" aria-hidden="true">
+        <img src="hospital.png" alt="Medical illustration" />
+      </div>
+      <div class="right-side">
+        <h2>Patient Registration Form</h2>
+        <form id="patientForm" action="payment1.html" method="GET">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="phone">Phone Number:</label>
+          <input type="text" id="phone" name="phone" required />
+
+          <label for="aadhar">Aadhar Number:</label>
+          <input type="text" id="aadhar" name="aadhar" required />
+
+          <label for="email">Email Address:</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="dob">Date of Birth:</label>
+          <input type="date" id="dob" name="dob" required />
+
+          <label for="address">Address:</label>
+          <textarea id="address" name="address" rows="4" required></textarea>
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

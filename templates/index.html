@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Receptionist - Welcome</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background-color: #e6f1fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        padding: 30px 20px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #004aad;
+        font-size: 28px;
+        margin-bottom: 5px;
+      }
+
+      p {
+        color: #333;
+        font-size: 14px;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      .bot-image {
+        width: 120px;
+        height: 120px;
+        margin: 10px auto;
+        display: block;
+      }
+
+      .welcome-btn {
+        background-color: #a00c0c;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 25px;
+        transition: 0.3s;
+      }
+
+      .welcome-btn:hover {
+        background-color: #850a0a;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        justify-items: center;
+      }
+
+      a.option {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s ease;
+      }
+
+      a.option:hover {
+        transform: scale(1.05);
+      }
+
+      .option img {
+        width: 55px;
+        height: 55px;
+        margin-bottom: 8px;
+      }
+
+      .option span {
+        font-size: 14px;
+        color: #333;
+      }
+
+      .doctor-login {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease;
+      }
+
+      .doctor-login:hover {
+        transform: scale(1.05);
+      }
+
+      .doctor-login img {
+        width: 55px;
+        height: 55px;
+      }
+
+      .doctor-login span {
+        font-size: 14px;
+        margin-top: 5px;
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Welcome!</h1>
+      <p>I'm your virtual Receptionist</p>
+
+      <img
+        src="{{ url_for('static', filename='images/robot.png') }}"
+        alt="Receptionist Bot"
+        class="bot-image"
+      />
+
+      <button class="welcome-btn">Welcome to our hospital!</button>
+
+      <div class="options">
+        <!-- Doctor Availability -->
+        <a href="{{ url_for('view_availability') }}" class="option">
+          <img
+            src="{{ url_for('static', filename='images/doctor.png') }}"
+            alt="Doctor Availability"
+          />
+          <span>Doctor Availability</span>
+        </a>
+
+        <!-- Appointment Booking -->
+        <a href="{{ url_for('appointment_booking') }}" class="option">
+          <img
+            src="{{ url_for('static', filename='images/calender.png') }}"
+            alt="Appointment Booking"
+          />
+          <span>Appointment Booking</span>
+        </a>
+
+        <!-- Queue -->
+        <a href="{{ url_for('queue') }}" class="option">
+          <img
+            src="{{ url_for('static', filename='images/queue.png') }}"
+            alt="Queue"
+          />
+          <span>Your Queue</span>
+        </a>
+
+        <!-- Navigation -->
+        <a href="{{ url_for('navigation') }}" class="option">
+          <img
+            src="{{ url_for('static', filename='images/navigation.png') }}"
+            alt="Navigation"
+          />
+          <span>Navigation</span>
+        </a>
+      </div>
+
+      <!-- Doctor Login -->
+      <a href="{{ url_for('doctor_login') }}" class="doctor-login">
+        <img
+          src="{{ url_for('static', filename='images/doctor.png') }}"
+          alt="Doctor Login"
+        />
+        <span>Doctor Login</span>
+      </a>
+    </div>
+  </body>
+</html>

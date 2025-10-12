@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Payment Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #d0eaff, #f0f7ff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Centered logo and name */
+    .branding {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .branding img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .branding h1 {
+      margin: 12px 0 0;
+      font-size: 32px;
+      color: #0a3d62;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(to right, #1976d2, #21cbf3);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    header h2 {
+      font-size: 30px;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 120px; /* increased gap */
+      padding: 80px 40px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 380px;
+      height: 520px; /* fixed height to match both cards */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: #222;
+      position: absolute;
+      top: 20px;
+    }
+
+    .qr-image {
+      width: 250px;
+      height: 250px;
+      border-radius: 16px;
+      object-fit: contain;
+      background-color: #f9f9f9;
+      margin-top: 70px;
+    }
+
+    .payment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+      margin-top: 60px;
+    }
+
+    .payment-button {
+      display: flex;
+      align-items: center;
+      background: linear-gradient(to right, #e1f5fe, #f0ffff);
+      padding: 14px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.08);
+      transition: transform 0.2s ease, background 0.2s ease;
+      min-height: 56px;
+    }
+
+    .payment-button:hover {
+      background: linear-gradient(to right, #bbdefb, #e3f2fd);
+      transform: scale(1.02);
+    }
+
+    .payment-button img {
+      width: 40px;
+      height: 40px;
+      margin-right: 16px;
+    }
+
+    .payment-button span {
+      font-size: 17px;
+      color: #0077cc;
+      font-weight: 500;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        gap: 50px;
+      }
+
+      .card {
+        width: 90%;
+        height: auto;
+      }
+
+      .qr-image {
+        margin-top: 60px;
+      }
+
+      .payment-list {
+        margin-top: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo and Name Centered -->
+  <div class="branding">
+    <img src="logo.png" alt="Brand Logo">
+    <h1>SmartPay</h1>
+  </div>
+
+  <header>
+    <h2>Secure Payment</h2>
+    <p>Choose your payment method or scan the QR code to pay instantly</p>
+  </header>
+
+  <section class="main">
+    <!-- QR Code Card -->
+    <div class="card">
+      <h2>Scan & Pay</h2>
+      <img src="qr.png" alt="QR Code" class="qr-image" />
+    </div>
+
+    <!-- Payment Options Card -->
+    <div class="card">
+      <h2>Payment Options</h2>
+      <div class="payment-list">
+        <div class="payment-button">
+          <img src="upi.png" alt="UPI" />
+          <span>Pay via UPI</span>
+        </div>
+        <div class="payment-button">
+          <img src="paytm.png" alt="Paytm" />
+          <span>Pay with Paytm</span>
+        </div>
+        <div class="payment-button">
+          <img src="phonepe.png" alt="PhonePe" />
+          <span>Pay with PhonePe</span>
+        </div>
+        <div class="payment-button">
+          <img src="gpay.png" alt="Google Pay" />
+          <span>Pay with Google Pay</span>
+        </div>
+        <div class="payment-button">
+          <img src="debit.png" alt="Debit Card" />
+          <span>Debit Card</span>
+        </div>
+        <div class="payment-button">
+          <img src="credit.png" alt="Credit Card" />
+          <span>Credit Card</span>
+        </div>
+        <div class="payment-button">
+          <img src="netbanking.png" alt="Net Banking" />
+          <span>Net Banking</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 SmartPay Systems. All rights reserved.
+  </footer>
+
+</body>
+</html>
